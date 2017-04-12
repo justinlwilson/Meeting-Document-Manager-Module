@@ -1,0 +1,1241 @@
+﻿-- Created By: Justin Wilson
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+/********************************************************/
+/*		CREATE TABLES FOR MEETING DOCUMENT MODULE		*/
+/********************************************************/
+
+
+/* DROP CONSTRAINTS IF THEY EXIST FIRST */
+/* IF NOT THIS WILL CAUSE ERROR */
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Documents_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Documents
+		DROP CONSTRAINT FK_MDM_Documents_On_MeetingID
+END
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Documents_On_DocumentGroupID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Documents
+		DROP CONSTRAINT FK_MDM_Documents_On_DocumentGroupID
+END
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Audio_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Audio
+		DROP CONSTRAINT FK_MDM_Audio_On_MeetingID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Markers_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Markers
+		DROP CONSTRAINT FK_MDM_Markers_On_MeetingID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Meetings_On_MeetingGroupID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_MeetingGroupID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Meetings_On_LocationID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_LocationID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'd{databaseOwner}FK_MDM_Meetings_On_MeetingTypeID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_MeetingTypeID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Audio_On_MIMEID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Audio
+		DROP CONSTRAINT FK_MDM_Audio_On_MIMEID
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Alerts')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Alerts
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Locations')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Locations
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingTypes')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_MeetingTypes
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroups')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_MeetingGroups
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroups')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_DocumentGroups
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meetings')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Audio_MIME
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Audio
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Markers')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Markers
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Documents')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Documents
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Errors')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Errors
+END
+
+/*DELETE ANY PROCEDURES THAT EXIST*/
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroup_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroup_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingType_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Location_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingType_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Location_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroup_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroup_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_Delete')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Delete
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Marker_Delete')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Delete
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Marker_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Document_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Document_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meeting_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meeting_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Markers_GET_By_MeetingID')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Markers_GET_By_MeetingID
+END
+
+/* DELETE ANY VIEWS */
+IF(EXISTS(SELECT name FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_vLocations')))
+BEGIN
+	DROP VIEW {databaseOwner}{objectQualifier}MDM_vLocations
+END
+
+/*		LOOKUP TABLES		*/
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Alerts
+(
+	AlertID						INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Alerts_On_AlertID PRIMARY KEY CLUSTERED,
+	Caption						NVARCHAR(200)			NOT NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Locations
+(
+	LocationID					INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Locations_On_LocationID PRIMARY KEY CLUSTERED,
+	BuildingName				NVARCHAR(100)			NOT NULL,
+	AddressOne					NVARCHAR(100)			NOT NULL,
+	AddressTwo					NVARCHAR(100)			NOT NULL,
+	GeoPoint					GEOGRAPHY				NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_MeetingTypes
+(
+	MeetingTypeID				INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_MeetingTypes_On_MeetingTypeID PRIMARY KEY CLUSTERED,
+	TypeName					NVARCHAR(100)			NOT NULL,
+	ShortDescription			NVARCHAR(500)			NULL,
+	SortOrder					INT						NOT NULL DEFAULT 0
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_MeetingGroups
+(
+	MeetingGroupID				INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_MeetingGroups_On_MeetingGroupID PRIMARY KEY CLUSTERED,
+	GroupName					NVARCHAR(100)			NOT NULL,
+	ShortDescription			NVARCHAR(500)			NULL,
+	SortOrder					INT						NOT NULL DEFAULT 0
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_DocumentGroups
+(
+	DocumentGroupID				INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_DocumentGroups_On_DocumentGroupID PRIMARY KEY CLUSTERED,
+	GroupName					NVARCHAR(100)			NOT NULL,
+	ShortDescription			NVARCHAR(500)			NULL,
+	SortOrder					INT						NOT NULL DEFAULT 0
+)
+
+/*		MAIN TABLES		*/
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+(
+	MeetingID					INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Meetings_On_MeetingID PRIMARY KEY CLUSTERED,
+	MeetingGroupID				INT						NOT NULL
+		CONSTRAINT FK_MDM_Meetings_On_MeetingGroupID
+			FOREIGN KEY (MeetingGroupID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_MeetingGroups(MeetingGroupID),
+	LocationID					INT						NOT NULL
+		CONSTRAINT FK_MDM_Meetings_On_LocationID
+			FOREIGN KEY (LocationID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_Locations(LocationID),
+	MeetingTypeID				INT						NOT NULL
+		CONSTRAINT FK_MDM_Meetings_On_MeetingTypeID
+			FOREIGN KEY (MeetingTypeID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_MeetingTypes(MeetingTypeID),
+	VimeoNumber					NVARCHAR(200)			DEFAULT NULL,
+	Flag						NVARCHAR(200)			DEFAULT NULL,
+	Begining					DATETIME				NOT NULL,
+	RecordCreated				DATETIME				NOT NULL DEFAULT GETDATE(),
+	RecordUpdated				DATETIME				NOT NULL DEFAULT GETDATE(),
+	CreatedBy					INT						NOT NULL,
+	UpdatedBy					INT						NULL,
+	Published					BIT						NOT NULL DEFAULT 0
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Audio_MIME
+(
+	MIMEID					INT IDENTITY					NOT NULL
+		CONSTRAINT PK_MDM_Audio_MIME_On_MIMEID PRIMARY KEY CLUSTERED,
+	Extension				NVARCHAR(10)		NOT NULL,
+	MIME					NVARCHAR(50)		NOT NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Audio
+(
+	AudioID						INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Audio_On_AudioID PRIMARY KEY CLUSTERED,
+	MeetingID					INT						NOT NULL
+		CONSTRAINT FK_MDM_Audio_On_MeetingID
+			FOREIGN KEY (MeetingID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_Meetings(MeetingID),
+	MIMEID						INT						NOT NULL
+		CONSTRAINT FK_MDM_Audio_On_MIMEID
+			FOREIGN KEY (MIMEID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_Audio_Mime(MIMEID),
+	OldName						NVARCHAR(200)			NULL,
+	UniqueName					UNIQUEIDENTIFIER		NOT NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Markers
+(
+	MarkerID					INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Markers_On_MarkerID PRIMARY KEY CLUSTERED,
+	MeetingID					INT						NOT NULL
+		CONSTRAINT FK_MDM_Markers_On_MeetingID
+			FOREIGN KEY (MeetingID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_Meetings(MeetingID),
+	KeyTime						INT						NOT NULL,
+	ShortDescription			NVARCHAR(150)			NOT NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Documents
+(
+	DocumentID					INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Documents_On_DocumentID PRIMARY KEY CLUSTERED,
+	MeetingID					INT						NOT NULL
+		CONSTRAINT FK_MDM_Documents_On_MeetingID
+			FOREIGN KEY (MeetingID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_Meetings(MeetingID),
+	DocumentGroupID				INT						NOT NULL
+		CONSTRAINT FK_MDM_Documents_On_DocumentGroupID
+			FOREIGN KEY (DocumentGroupID)
+				REFERENCES {databaseOwner}{objectQualifier}MDM_DocumentGroups(DocumentGroupID),
+	Content						NVARCHAR(MAX)			NOT NULL,
+	UserID						INT						NOT NULL
+)
+
+CREATE TABLE {databaseOwner}{objectQualifier}MDM_Errors
+(
+	ErrorID						INT IDENTITY			NOT NULL
+		CONSTRAINT PK_MDM_Errors_On_ErrorID PRIMARY KEY CLUSTERED,
+	OccurredOn					DATETIME				NOT NULL,
+	Authority					NVARCHAR(50)			NULL,
+	DNNUser						INT						NOT NULL	DEFAULT 0,
+	FullMessage					NVARCHAR(4000)			NULL,
+	ErrSource					NVARCHAR(200)			NOT NULL,
+	ErrNumber					INT						NOT NULL	DEFAULT 0,
+	Severity					INT						NOT NULL	DEFAULT 0,
+	Line						INT						NOT NULL	DEFAULT 0,
+	Host						NVARCHAR(50)			NULL
+)
+
+/********************************************************/
+/*		STORED PROCS FOR MEETING DOCUMENT MODULE		*/
+/********************************************************/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Update
+	@MeetingID			INT,
+	@MeetingGroupID		INT,
+	@LocationID			INT,
+	@MeetingTypeID		INT,
+	@VimeoNumber		NVARCHAR(200),
+	@Flag				NVARCHAR(200),
+	@Begining			DATETIME,
+	@Published			BIT					= 1,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		UPDATE		{databaseOwner}{objectQualifier}MDM_Meetings
+		SET			MeetingGroupID		= @MeetingGroupID,
+					LocationID			= @LocationID,
+					MeetingTypeID		= @MeetingTypeID,
+					VimeoNumber			= @VimeoNumber,
+					Flag				= @Flag,
+					Begining			= @Begining,
+					RecordUpdated		= GETDATE(),
+					UpdatedBy			= @UserID,
+					Published			= @Published
+		WHERE		MeetingID			= @MeetingID
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Meeting_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Create
+	@MeetingGroupID		INT,
+	@LocationID			INT,
+	@MeetingTypeID		INT,
+	@VimeoNumber		NVARCHAR(200),
+	@Flag				NVARCHAR(200)		= Null,
+	@Begining			DATETIME,
+	@Published			BIT					= 1,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+		
+		BEGIN TRANSACTION
+
+		INSERT INTO		{databaseOwner}{objectQualifier}MDM_Meetings
+		VALUES			(@MeetingGroupID, @LocationID, @MeetingTypeID, @VimeoNumber, @Flag, @Begining, GETDATE(), GETDATE(), @UserID, NULL, @Published)
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Meeting_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Document_Create
+	@MeetingID			INT,
+	@DocumentGroupID	INT,
+	@Content			NVARCHAR(MAX),
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+		
+		BEGIN TRANSACTION
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Documents
+		VALUES (@MeetingID, @DocumentGroupID, @Content, @UserID)
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Document_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Delete
+	@MarkerID			INT,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		DELETE FROM {databaseOwner}{objectQualifier}MDM_Markers WHERE MarkerID = @MarkerID;
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors 
+		VALUES (GETDATE(), USER, @UserID, 'DELETED: MarkerID (' + CONVERT(NVARCHAR(100), @MarkerID) + ')', '{databaseOwner}{objectQualifier}MDM_Audio_Delete', 0, 0, 0, HOST_NAME());
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Marker_Delete', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Create
+	@MeetingID			INT,
+	@KeyTime			INT,
+	@ShortDescription	NVARCHAR(150),
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+		
+		IF EXISTS(SELECT MarkerID FROM {databaseOwner}{objectQualifier}MDM_Markers WHERE KeyTime = @KeyTime AND MeetingID = @MeetingID)
+		BEGIN
+			SET @SPStatus = 1
+			INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, 'Marker Already Exists for Time (' + CONVERT(NVARCHAR(20), @KeyTime) + ') for MeetingID (' + CONVERT(NVARCHAR(20), @MeetingID) + ').', '{databaseOwner}{objectQualifier}MDM_Marker_Create', 10, 10, 0, HOST_NAME());
+			SET @ErrMsg = 'A marker at this time already exists for this meeting.'
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+
+			INSERT INTO		{databaseOwner}{objectQualifier}MDM_Markers (MeetingID, KeyTime, ShortDescription)
+			VALUES			(@MeetingID, @KeyTime, @ShortDescription)
+
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Marker_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Delete
+	@AudioID			INT,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET			@SPStatus = 0;
+		DECLARE		@DeletedItem	NVARCHAR(4000)
+		SET			@DeletedItem	= 'DELETED: AudioID (' + CONVERT(NVARCHAR(200), @AudioID) + ')'
+		
+		BEGIN TRANSACTION
+
+		DELETE FROM {databaseOwner}{objectQualifier}MDM_Audio WHERE AudioID = @AudioID;
+		
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors 
+		VALUES (GETDATE(), USER, @UserID, @DeletedItem, '{databaseOwner}{objectQualifier}MDM_Audio_Delete', 0, 0, 0, HOST_NAME());
+	
+		COMMIT TRANSACTION
+	
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Audio_Delete', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Create
+	@MeetingID			INT,
+	@MIMEID				INT,
+	@OldName			NVARCHAR(200),
+	@UniqueName			UNIQUEIDENTIFIER,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+		
+		BEGIN TRANSACTION
+
+		INSERT INTO		{databaseOwner}{objectQualifier}MDM_Audio (MeetingID, MIMEID, OldName, UniqueName)
+		VALUES			(@MeetingID, @MIMEID, @OldName, @UniqueName)
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Audio_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Update
+	@MIMEID				INT,
+	@Extension			NVARCHAR(10),
+	@MIME				NVARCHAR(50),
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		UPDATE	{databaseOwner}{objectQualifier}MDM_Audio_MIME
+		SET		Extension		= @Extension,
+				MIME			= @MIME
+		WHERE	MIMEID			= @MIMEID
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Audio_MIME_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Create
+	@Extension			NVARCHAR(10),
+	@MIME				NVARCHAR(50),
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+		BEGIN TRANSACTION
+		INSERT INTO		{databaseOwner}{objectQualifier}MDM_Audio_MIME	(Extension, MIME)
+		VALUES			(@Extension, @MIME)
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		ROLLBACK TRAN
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Audio_MIME_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Update
+	@DocumentGroupID	INT,
+	@GroupName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500),
+	@SortOrder			INT,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		UPDATE	{databaseOwner}{objectQualifier}MDM_DocumentGroups
+		SET		GroupName			= @GroupName,
+				ShortDescription	= @ShortDescription,
+				SortOrder			= @SortOrder
+		WHERE	DocumentGroupID		= @DocumentGroupID
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_DocumentGroup_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Update
+	@MeetingGroupID		INT,
+	@GroupName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500),
+	@SortOrder			INT,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		UPDATE {databaseOwner}{objectQualifier}MDM_MeetingGroups
+		SET		GroupName			= @GroupName,
+				ShortDescription	= @ShortDescription,
+				SortOrder			= @SortOrder
+		WHERE	MeetingGroupID		= @MeetingGroupID
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_MeetingGroup_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Update
+	@MeetingTypeID		INT,
+	@TypeName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500),
+	@SortOrder			INT,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0
+
+		BEGIN TRANSACTION
+
+		UPDATE {databaseOwner}{objectQualifier}MDM_MeetingTypes 
+		SET		TypeName			= @TypeName,
+				ShortDescription	= @ShortDescription,
+				SortOrder			= @SortOrder
+		WHERE	MeetingTypeID		= @MeetingTypeID
+
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_MeetingType_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Update
+	@LocationID			INT,
+	@BuildingName		NVARCHAR(100),
+	@AddressOne			NVARCHAR(100),
+	@AddressTwo			NVARCHAR(100),
+	@Latitude			NVARCHAR(20)		= NULL,
+	@Longitude			NVARCHAR(20)		= NULL,
+	@UserID				INT,
+	@SPStatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPStatus = 0;
+		
+		DECLARE @GeoPoint GEOGRAPHY
+		
+		IF @Latitude IS NOT NULL AND @Longitude IS NOT NULL
+		BEGIN
+			SET @GeoPoint = geography::Point(@Latitude, @Longitude, 4326);
+			BEGIN TRANSACTION
+				UPDATE	{databaseOwner}{objectQualifier}MDM_Locations
+				SET		BuildingName	= @BuildingName,
+						AddressOne		= @AddressOne,
+						AddressTwo		= @AddressTwo,
+						GeoPoint		= @GeoPoint
+				WHERE	LocationID		= @LocationID
+			COMMIT TRANSACTION
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+				UPDATE	{databaseOwner}{objectQualifier}MDM_Locations
+				SET		BuildingName	= @BuildingName,
+						AddressOne		= @AddressOne,
+						AddressTwo		= @AddressTwo
+				WHERE	LocationID		= @LocationID
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Location_Update', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create
+	@GroupName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500)	= NULL,
+	@SortOrder			INT				= 0,
+	@UserID				INT,
+	@SPStatus			INT				OUTPUT,
+	@ErrMsg				NVARCHAR(200)	OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPSTatus	= 0
+		IF EXISTS(SELECT GroupName FROM {databaseOwner}{objectQualifier}MDM_DocumentGroups WHERE GroupName = @GroupName)
+		BEGIN
+			SET @SPSTatus	= 1
+			SET @ErrMsg		= 'A document group with the name "' + @GroupName + '" already exists.'
+			RAISERROR(@ErrMsg, 10, 1)
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+			INSERT INTO {databaseOwner}{objectQualifier}MDM_DocumentGroups VALUES (@GroupName, @ShortDescription, @SortOrder);
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_DocumentGroup_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+	
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Create
+	@GroupName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500)	= NULL,
+	@SortOrder			INT				= 0,
+	@UserID				INT,
+	@SPStatus			INT				OUTPUT,
+	@ErrMsg				NVARCHAR(200)	OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPSTatus	= 0
+		IF EXISTS(SELECT GroupName FROM {databaseOwner}{objectQualifier}MDM_MeetingGroups WHERE GroupName = @GroupName)
+		BEGIN
+			SET @SPSTatus	= 1
+			SET @ErrMsg		= 'A meeting group with the name "' + @GroupName + '" already exists.'
+			RAISERROR(@ErrMsg, 10, 1)
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+			INSERT INTO {databaseOwner}{objectQualifier}MDM_MeetingGroups VALUES (@GroupName, @ShortDescription, @SortOrder);
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_MeetingGroup_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Create
+	@TypeName			NVARCHAR(100),
+	@ShortDescription	NVARCHAR(500)	= NULL,
+	@SortOrder			INT				= 0,
+	@UserID				INT,
+	@SPStatus			INT				OUTPUT,
+	@ErrMsg				NVARCHAR(200)	OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPSTatus	= 0
+		IF EXISTS(SELECT TypeName FROM {databaseOwner}{objectQualifier}MDM_MeetingTypes WHERE TypeName = @TypeName)
+		BEGIN
+			SET @SPSTatus	= 1
+			SET @ErrMsg		= 'A meeting type with the name "' + @TypeName + '" already exists.'
+			RAISERROR(@ErrMsg, 10, 1)
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+				INSERT INTO {databaseOwner}{objectQualifier}MDM_MeetingTypes VALUES (@TypeName, @ShortDescription, @SortOrder);
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_MeetingType_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Create
+	@BuildingName		NVARCHAR(100),
+	@AddressOne			NVARCHAR(100),
+	@AddressTwo			NVARCHAR(100),
+	@Latitude			NVARCHAR(20),
+	@Longitude			NVARCHAR(20),
+	@UserID				INT,
+	@SPSTatus			INT					OUTPUT,
+	@ErrMsg				NVARCHAR(200)		OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET @SPSTatus	= 0
+		DECLARE @GeoPoint GEOGRAPHY;
+		IF @Latitude IS NOT NULL AND @Longitude IS NOT NULL
+		BEGIN
+			SET @GeoPoint = geography::Point(@Latitude, @Longitude, 4326);
+		END
+		ELSE
+		BEGIN
+			SET @GeoPoint = NULL;
+		END
+		IF EXISTS(SELECT BuildingName FROM {databaseOwner}{objectQualifier}MDM_Locations WHERE BuildingName = @BuildingName)
+		BEGIN
+			SET @SPSTatus	= 1
+			SET @ErrMsg		= 'A building with the name "' + @BuildingName + '" already exists.'
+			RAISERROR(@ErrMsg, 10, 1)
+		END
+		ELSE
+		BEGIN
+			BEGIN TRANSACTION
+				INSERT INTO {databaseOwner}{objectQualifier}MDM_Locations VALUES (@BuildingName, @AddressOne, @AddressTwo, @GeoPoint);
+			COMMIT TRANSACTION
+		END
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMessage	NVARCHAR(4000),
+				@ErrorSeverity	INT,
+				@ErrorState		INT,
+				@LineNumber		INT,
+				@ErrorNumber	INT;
+
+		SELECT
+			@LineNumber			= ERROR_LINE(),
+			@ErrorMessage		= ERROR_MESSAGE(),
+			@ErrorSeverity		= ERROR_SEVERITY(),
+			@ErrorState			= ERROR_STATE(),
+			@ErrorNumber		= ERROR_NUMBER();
+
+		ROLLBACK TRAN
+
+		SET @ErrMsg = @ErrorMessage
+		SET	@SPStatus = @ErrorState
+
+		INSERT INTO {databaseOwner}{objectQualifier}MDM_Errors VALUES (GETDATE(), USER, @UserID, @ErrorMessage, '{databaseOwner}{objectQualifier}MDM_Location_Create', @ErrorNumber, @ErrorSeverity, @LineNumber, HOST_NAME());
+
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_Markers_GET_By_MeetingID
+	@MeetingID			INT	
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT MarkerID, KeyTime, CAST(DATEADD(SECOND, KeyTime, 0) AS TIME(0)) AS TotalTime,  DATEPART(HOUR, CAST(DATEADD(SECOND, KeyTime, 0) AS TIME(0))) AS DisplayHour, DATEPART(MINUTE, CAST(DATEADD(SECOND, KeyTime, 0) AS TIME(0))) AS DisplayMinute, DATEPART(SECOND, CAST(DATEADD(SECOND, KeyTime, 0) AS TIME(0))) AS DisplaySecond, ShortDescription FROM {databaseOwner}{objectQualifier}MDM_Markers WHERE MeetingID = @MeetingID ORDER BY KeyTime ASC
+
+END
+GO
+
+/********************************************************/
+/*			POPULATE A FEW VALUES IN THE DATABASE		*/
+/********************************************************/
+/********************************************************/
+/********************************************************/
+/********************************************************/
+
+INSERT INTO {databaseOwner}{objectQualifier}MDM_Audio_MIME (Extension, MIME) VALUES ('mp3', 'audio/mpeg');
+INSERT INTO {databaseOwner}{objectQualifier}MDM_Audio_MIME (Extension, MIME) VALUES ('ogg', 'audio/ogg');
+INSERT INTO {databaseOwner}{objectQualifier}MDM_Audio_MIME (Extension, MIME) VALUES ('wav', 'audio/wav');
+
+INSERT INTO {databaseOwner}{objectQualifier}MDM_Alerts VALUES ('Cancelled');
+INSERT INTO {databaseOwner}{objectQualifier}MDM_Alerts VALUES ('Postponed');
+
+EXEC {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create 'Public Notice', DEFAULT, DEFAULT, 1, NULL, NULL
+EXEC {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create 'Agenda', DEFAULT, DEFAULT, 2, NULL, NULL
+EXEC {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create 'Summary', DEFAULT, DEFAULT, 3, NULL, NULL
+EXEC {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create 'Minutes', DEFAULT, DEFAULT, 4, NULL, NULL
+GO
+
+/********************************/
+/*			NEEDED VIEWS		*/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+
+CREATE VIEW {databaseOwner}{objectQualifier}MDM_vLocations AS
+SELECT LocationID, BuildingName, AddressOne, AddressTwo, GeoPoint.Lat As Latitude, GeoPoint.Long As Longitude FROM {databaseOwner}{objectQualifier}MDM_Locations
+GO

@@ -1,0 +1,26 @@
+﻿<h3>Meeting Document Manager</h3>
+<p class="Contributor">
+	Forsyth County Georgia | Information Systems &amp; Technology <br />
+	<a href="mailto:webmaster@forsythco.com">webmaster@forsythco.com</a><br />
+	<a href=http://www.forsythco.com>http://www.forsythco.com</a><br />
+</p>
+<hr/>
+<div class="License">
+	<h3>About the Meeting Document Manager</h3>
+	<p class="Owner">
+		<b>Version 1.5</b><br /><br />
+	</p>
+	<p>Version 1.5 is the initial release of the Meeting Document Manager module for DNN.  
+	This software was initially created by Justin Wilson of Forsyth County Information Systems &amp; Technology.</p>
+<h3>Module Project Team:</h3>
+<ul>
+	<li>Beverly Darke – Project Manager</li>
+	<li>Jodi Gardner – Project Principal</li>
+	<li>Justin Wilson – Software Developer</li>
+</ul>
+<h3>Updates:</h3>
+<ul>
+	<li>Removed documents that have already been added from the dropdown menu when adding new documents.</li>
+	<li>Resolved issues with Search Indexing</li>
+	<li>Added new MeetingAdmin role</li>
+</ul>

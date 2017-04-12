@@ -1,0 +1,149 @@
+#MediaArea{
+	width:auto;
+}
+#MarkerGroup{
+	height:256px;
+}
+.marker {
+	display:inline-block;
+}
+.markertitle{
+	display:block;
+	margin-left:500px;
+	height:24px;
+	padding-left:8px;
+	border-bottom:0px solid gray;
+}
+.keyframe {
+	display:block;
+	padding:5px;
+    height:35px;
+	font-size:15px;
+	cursor:pointer;
+    border-left:solid rgb(204, 204, 204) 4px;
+}
+.keyframe .time{
+	display:inline-block;
+	width:50px;
+	text-align:right;
+	font-size:10px;
+	margin-right:5px;
+}
+.keyframe .title{
+	display:inline-block;
+}
+.MDM_video{
+	float:left;
+}
+.keyframe_on{
+	font-weight:bold;
+    border-left:solid #08C 4px;
+}
+.mdm_podcast{
+	clear:both;
+}
+.mdm_podcast{
+	width:680px
+}
+
+.AgendaItemDate {
+    background-color:rgb(0,150,255);
+    color:white; 
+    width: 39px;
+    text-align:center;
+    border-top:5px solid rgb(0,150,255);
+    border-bottom:5px solid rgb(0,150,255);
+    float:left;
+}
+
+.AgendaItemDate .Month {
+    font-size:8pt;
+    text-transform:uppercase;
+}
+.AgendaItemDate .Day{
+    font-size:15pt;
+}
+.AgendaItemControl{
+    font-size:15pt;
+    margin-bottom:20px;
+}
+
+.AgendaItemControl .BottomLine
+{
+    font-size:14px;
+}
+
+.MDM_Calendar_Highlight
+{
+    background-color:#0096FF;
+}
+
+.MDM_Calendar_Content{
+    float:left;
+    width:300px;
+    margin-right:40px;
+}
+
+.RadGrid_ModernBrowsers
+{
+     border-radius: 10px;
+     overflow: hidden;
+}
+ 
+div.RadGrid_MetroTouch td.rgPagerCell
+{
+     border-left: 0;
+}
+ 
+.RadGrid_Rounded
+{
+     position: relative;
+}
+ 
+.ltRounded,
+.rtRounded,
+.lbRounded,
+.rbRounded
+{
+     background: url(images/rounded_corners.png);
+     position: absolute;
+     width: 10px;
+     height: 10px;
+     top: -1px;
+     left: -1px;
+}
+ 
+.rtRounded
+{
+     right: -1px;
+     left: auto;
+     background-position: -10px 0;
+}
+ 
+.lbRounded
+{
+     top: auto;
+     bottom: -1px;
+     background-position: 0 -10px;
+}
+ 
+.rbRounded
+{
+     top: auto;
+     left: auto;
+     right: -1px;
+     bottom: -1px;
+     background-position: -10px -10px;
+}
+
+.MDM_AgendaView_Content{
+    width:350px;
+    display:inline-block;
+    float:left;
+}
+
+.MDM_AgendaTitle{
+    display:block;
+    font-size:18px;
+    padding-bottom:15px;
+}

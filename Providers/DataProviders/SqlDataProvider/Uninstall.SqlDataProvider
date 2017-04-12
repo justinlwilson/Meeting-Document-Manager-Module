@@ -1,0 +1,184 @@
+﻿IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Documents_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Documents
+		DROP CONSTRAINT FK_MDM_Documents_On_MeetingID
+END
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Documents_On_DocumentGroupID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Documents
+		DROP CONSTRAINT FK_MDM_Documents_On_DocumentGroupID
+END
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Audio_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Audio
+		DROP CONSTRAINT FK_MDM_Audio_On_MeetingID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Markers_On_MeetingID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Markers
+		DROP CONSTRAINT FK_MDM_Markers_On_MeetingID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Meetings_On_MeetingGroupID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_MeetingGroupID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Meetings_On_LocationID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_LocationID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'd{databaseOwner}FK_MDM_Meetings_On_MeetingTypeID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+		DROP CONSTRAINT FK_MDM_Meetings_On_MeetingTypeID
+END
+
+IF(EXISTS(SELECT [object_id] FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_MDM_Audio_On_MIMEID')))
+BEGIN
+	ALTER TABLE {databaseOwner}{objectQualifier}MDM_Audio
+		DROP CONSTRAINT FK_MDM_Audio_On_MIMEID
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Alerts')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Alerts
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Locations')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Locations
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingTypes')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_MeetingTypes
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroups')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_MeetingGroups
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroups')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_DocumentGroups
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meetings')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Meetings
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Audio_MIME
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Audio
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Markers')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Markers
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Documents')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Documents
+END
+
+IF(EXISTS(SELECT name FROM sys.tables WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Errors')))
+BEGIN
+	DROP TABLE {databaseOwner}{objectQualifier}MDM_Errors
+END
+
+/*DELETE ANY PROCEDURES THAT EXIST*/
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_OutstandingDocumentsByMeeting')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_OutstandingDocumentsByMeeting
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroup_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroup_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingType_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Location_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingType_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingType_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Location_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Location_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_MeetingGroup_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingGroup_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_DocumentGroup_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_DocumentGroup_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_MIME_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_MIME_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Audio_Delete')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Audio_Delete
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Marker_Delete')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Delete
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Marker_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Marker_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Document_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Document_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meeting_Create')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Create
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Meeting_Update')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Meeting_Update
+END
+IF(EXISTS(SELECT name FROM sys.procedures WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_Markers_GET_By_MeetingID')))
+BEGIN
+	DROP PROCEDURE {databaseOwner}{objectQualifier}MDM_Markers_GET_By_MeetingID
+END
+
+/* DELETE ANY VIEWS */
+IF(EXISTS(SELECT name FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}MDM_vLocations')))
+BEGIN
+	DROP VIEW {databaseOwner}{objectQualifier}MDM_vLocations
+END

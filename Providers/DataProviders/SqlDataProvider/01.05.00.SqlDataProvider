@@ -1,0 +1,19 @@
+﻿CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_OutstandingDocumentsByMeeting
+	@MeetingID	INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT {databaseOwner}{objectQualifier}MDM_DocumentGroups.* FROM
+		(
+			SELECT {databaseOwner}{objectQualifier}MDM_Documents.DocumentGroupID
+			FROM {databaseOwner}{objectQualifier}MDM_Meetings 
+				INNER JOIN {databaseOwner}{objectQualifier}MDM_Documents 
+					ON {databaseOwner}{objectQualifier}MDM_Documents.MeetingID = {databaseOwner}{objectQualifier}MDM_Meetings.MeetingID 
+			WHERE {databaseOwner}{objectQualifier}MDM_Meetings.MeetingID = @MeetingID
+		) T
+		FULL OUTER JOIN {databaseOwner}{objectQualifier}MDM_DocumentGroups 
+			ON {databaseOwner}{objectQualifier}MDM_DocumentGroups.DocumentGroupID = T.DocumentGroupID WHERE T.DocumentGroupID IS NULL 
+
+END
+GO
