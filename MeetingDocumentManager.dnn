@@ -1,0 +1,191 @@
+<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="MeetingDocumentManager" type="Module" version="01.05.00">
+      <friendlyName>Meetings</friendlyName>
+      <description>Forsyth County Meeting Document Manager Module</description>
+      <iconFile>Images/MDMIcon.png</iconFile>
+      <owner>
+        <name>Information Systems and Technology</name>
+        <organization>Forsyth County Georgia</organization>
+        <url>http://www.forsythco.com</url>
+        <email>webmaster@forsythco.com</email>
+      </owner>
+      <license src="License.txt"></license>
+      <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+      <dependencies>
+        <dependency type="CoreVersion">07.00.02</dependency>
+      </dependencies>
+      <components>
+        <component type="Script">
+          <scripts>
+            <basePath>DesktopModules\MeetingDocumentManager</basePath>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>01.05.00.SqlDataProvider</name>
+              <version>01.05.00</version>
+            </script>
+            <script type="UnInstall">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>Uninstall.SqlDataProvider</name>
+              <version>01.05.00</version>
+            </script>
+          </scripts>
+        </component>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/MeetingDocumentManager</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+        <component type="Module">
+          <desktopModule>
+            <moduleName>MeetingDocumentManager</moduleName>
+            <foldername>MeetingDocumentManager</foldername>
+            <businessControllerClass>ForsythCo.Modules.MeetingDocumentManager.Components.FeatureController</businessControllerClass>
+            <supportedFeatures>
+              <supportedFeature type="Searchable"/>
+              <supportedFeature type="Upgradable"/>
+            </supportedFeatures>
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>County Meetings</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey />
+                    <controlSrc>DesktopModules/MeetingDocumentManager/View.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle />
+                    <controlType>View</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Edit</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/Edit.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Content</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Alert</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/AddAlert.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Set Alert Message</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>DocumentTypes</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/EditDocumentTypes.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Document Types</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Locations</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/EditLocations.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Locations</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Video</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/AddVideo.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Manage Meeting Video</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>MeetingTypes</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/EditMeetingTypes.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Meeting Types</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>MeetingGroups</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/EditMeetingGroups.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Meeting Groups</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Documents</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/AddDocument.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Add New Document</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Meetings</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/AddMeeting.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Add Meeting</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile/>
+                    <helpUrl/>
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Settings</controlKey>
+                    <controlSrc>DesktopModules/MeetingDocumentManager/Settings.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>MeetingDocumentManager Settings</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <assembly>
+              <name>MeetingDocumentManager.dll</name>
+              <path>bin</path>
+            </assembly>
+          </assemblies>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>
