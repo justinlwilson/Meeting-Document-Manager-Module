@@ -1,87 +1,60 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="ForsythCo.Modules.MeetingDocumentManager.View" %>
 <%@ Register Src="~/desktopmodules/MeetingDocumentManager/AgendaView.ascx" TagPrefix="uc1" TagName="AgendaView" %>
-<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
+<%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
+<dnn:DnnJsInclude runat="server" FilePath="~/DesktopModules/MeetingDocumentManager/js/core.js" />
 <asp:Label ID="lblJunk" Visible="false" runat="server" />
 <asp:Panel runat="server" ID="pnlAgenda">
 
     <div class="container">
         <asp:Panel runat="server" ID="pnlAdminAddMeeting" Visible="false">
-            <asp:HyperLink runat="server" ID="lnkAddMeeting" Text="Add Meeting"></asp:HyperLink>
+            <asp:HyperLink runat="server" ID="lnkAddMeeting" CssClass="btn btn-primary btn-lg" Text="Add Meeting"></asp:HyperLink>
         </asp:Panel>
         <div style="display:block;"><span style="float:right;">
             <asp:HyperLink runat="server" id="lnkCalendar"><em class="icon icon-calendar"></em> Calendar</asp:HyperLink>
             &nbsp;&nbsp;&nbsp;<asp:HyperLink runat="server" id="lnkRSS"><em class="icon icon-rss"></em> RSS</asp:HyperLink>
 
                                     </span><div style="clear:both;"></div></div>
-        <telerik:RadSkinManager ID="QsfSkinManager" runat="server" ShowChooser="false" />
-        <telerik:RadFormDecorator ID="QsfFromDecorator" runat="server" DecoratedControls="All" EnableRoundedCorners="true" />
-        <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server" RestoreOriginalRenderDelegate="false">
-            <ajaxsettings>
-            <telerik:AjaxSetting AjaxControlID="RadGrid1">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
-                </UpdatedControls>
-            </telerik:AjaxSetting>
-        </ajaxsettings>
-        </telerik:RadAjaxManager>
-        <telerik:RadGrid runat="server" OnItemDataBound="RadGrid1_DataBound" ID="RadGrid1" Skin="MetroTouch" CssClass="RadGrid_Rounded"
-            AutoGenerateColumns="false" AllowFilteringByColumn="true" AllowPaging="True" AllowSorting="true"
-            OnNeedDataSource="RadGrid1_NeedDataSource">
-            <groupingsettings casesensitive="false"></groupingsettings>
-            <mastertableview TableLayout="fixed">
-                <GroupByExpressions>
-                    <telerik:GridGroupByExpression>
-                        <SelectFields>
-                            <telerik:GridGroupByField FieldAlias="Meetings"  FieldName="MonthYearGroup" FormatString="{0}" HeaderValueSeparator=": "></telerik:GridGroupByField>
-                       </SelectFields>
-                        <GroupByFields>
-                        <telerik:GridGroupByField FieldName="MonthYearGroupDT" SortOrder="Descending" ></telerik:GridGroupByField>
-                    </GroupByFields>
-                    </telerik:GridGroupByExpression>
-                </GroupByExpressions>
-                <Columns>
-                    <telerik:GridTemplateColumn Visible="false" AllowFiltering="false" HeaderStyle-Width="150px">
-                        <ItemTemplate>
-                            <asp:HyperLink runat="server" ID="lnkAddVideo"><em class="icon icon-vimeo-square"></em>&nbsp;VIDEO</asp:HyperLink><br />
-                            <asp:HyperLink runat="server" ID="lnkAddDocs"><em class="icon icon-clipboard">&nbsp;</em>DOCUMENTS</asp:HyperLink><br />
-                            <asp:HyperLink runat="server" ID="lnkAlert"><em class="icon icon-exclamation-circle"></em>&nbsp;ALERT</asp:HyperLink><br />
-                            <asp:HyperLink runat="server" ID="lnkEditMeeting"><em class="icon icon-edit"></em>&nbsp;EDIT</asp:HyperLink>
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn DataField="DateString" FilterControlWidth="50px" HeaderText="Date" HeaderStyle-Width="60px"
-                    SortExpression="DateString" UniqueName="DateString" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
-                        <ItemTemplate>
-                            <div class="AgendaItemDate">
-                                <div style="height:20px;"><%#((DateTime)Eval("Begining")).ToString("MMM")%></div>
-                                <div class="Day"><%#((DateTime)Eval("Begining")).ToString("dd")%></div>
-                            </div>
-                        </ItemTemplate>
-                  </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn DataField="MeetingGroup.GroupName" HeaderText="Meeting"
-                    SortExpression="MeetingGroup.GroupName" UniqueName="MeetingGroup.GroupName" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
-                        <ItemTemplate>
-                            <strong><a href='<%#PortalSettings.ActiveTab.FullUrl %>/Meeting/<%#Eval("MeetingID") %>'><%#Convert.ToString(Eval("VimeoNumber")).Length > 1 ? "<em class='icon icon-youtube-play'></em> ":"" %><%#Eval("MeetingGroup.GroupName") %><%#Convert.ToString(Eval("MeetingGroup.ShortDescription")).Length > 1 ? " <a data-original-title='" + Eval("MeetingGroup.ShortDescription") + "' href='#' rel='tooltip'><em class='icon icon-info-circle'></em></a>" : "" %></a></strong>
-                            <%#Convert.ToString(Eval("Flag")).Length > 1 ? "<br/><span class='label label-danger'>" + Eval("Flag") + "</span>" : "" %>
-                        </ItemTemplate>
-                  </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn DataField="MeetingType.TypeName" HeaderText="Type"
-                    SortExpression="MeetingType.TypeName" UniqueName="MeetingType.TypeName" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
-                    <ItemTemplate>
-                        <strong><a href='<%#PortalSettings.ActiveTab.FullUrl %>/Meeting/<%#Eval("MeetingID") %>'><%#Eval("MeetingType.TypeName") %> @ <%#Eval("TimeString") %></a></strong><br />
-                        <asp:Label runat="server" id="lblDocCount" Visible="false">Documents Attached: <%#Eval("Documents.Count") %></asp:Label> 
-                    </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn DataField="Location.BuildingName" HeaderText="Location"
-                    SortExpression="Location.BuildingName" UniqueName="Location.BuildingName" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
-                    <ItemTemplate>
-                        <strong><%#Eval("Location.BuildingName") %></strong><br />
-                        <a target="_blank" href='<%#String.Format("http://maps.google.com/?q={0} {1}", Eval("Location.AddressOne"), Eval("Location.AddressTwo")) %>'><em class="icon icon-map-marker"></em></a> <asp:Label runat="server" Text='<%#Eval("Location.AddressOne") %>'></asp:Label><br />
-                            <asp:Label runat="server" Text='<%#Eval("Location.AddressTwo") %>'></asp:Label>
-                    </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                </Columns>
-            </mastertableview>
-        </telerik:RadGrid>
+
+        <div class="col-md-12">
+            <a id="mgm-btn-small-filters" class="btn btn-default btn-lg btn-block visible-xs visible-sm"><span class="glyphicon glyphicon-sort
+"></span> Show/Hide Filters</a><br/>
+						<div class="row">
+							<div id="mdm-filters" class="col-md-4">
+								<div class="btn-group btn-group-justified" role="group" aria-label="...">
+									<a id="mdm-btn-dateFilter" type="button" class="btn btn-default btn-lg"><span class="icon icon-filter"></span> Date</a>
+									<a id="mdm-btn-groupFilter" type="button" class="btn btn-default btn-lg"><span class="icon icon-filter"></span> Group</a>
+									<a id="mdm-btn-clear" type="button" class="btn btn-default btn-lg"><span class="icon icon-filter"></span> Clear</a>
+									</div><hr />
+								<div id="mdm-date-filers" class="">
+									<h4>Month</h4>
+									<div id="mdm-filter-month" class="list-group col-md-12">
+									</div>
+									<h4>Year</h4>
+									<div id="mdm-filter-year" class="list-group col-md-12">
+									</div></div>
+								<div id="mdm-grp-filers" class="collapse">
+									<h4>Meeting Body</h4>
+									<div id="mdm-filter-group" class="list-group col-md-12">
+									</div>
+									<h4>Meeting Type</h4>
+									<div id="mdm-filter-type" class="list-group col-md-12">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">Forsyth County Meetings</h3>
+									</div>
+									<div id="mdm-itemlist" class="panel-body">
+
+									</div>
+								</div>
+								<a id="mdm-btn-loadmore" class="btn btn-default btn-lg btn-block">Load More...</a>
+							</div>
+						</div>
+        </div>
+        <hr />
     </div>
 </asp:Panel>
 
@@ -122,5 +95,11 @@
         <FooterTemplate>
         </FooterTemplate>
     </asp:Repeater>
+    <asp:HiddenField ID="hdnEditVideo" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnEditAlert" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnEditDoc" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnEditMeeting" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnModID" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnIsEditor" ClientIDMode="Static" runat="server" Value="false" />
 </div>
 <asp:Panel runat="server" ID="pnlContent"></asp:Panel>

@@ -16,12 +16,8 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Components
 
         public IEnumerable<MeetingType> GetMeetingTypes()
         {
-            IEnumerable<MeetingType> t;
             using (IDataContext ctx = DataContext.Instance())
-            {
-                t = ctx.GetRepository<MeetingType>().Get();
-            }
-            return t;
+                return ctx.ExecuteQuery<MeetingType>(System.Data.CommandType.Text, "ORDER BY TypeName");
         }
 
         public void UpdateMeetingType(MeetingType m)

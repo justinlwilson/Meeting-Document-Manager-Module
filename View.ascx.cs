@@ -9,7 +9,6 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Services.Localization;
 using DotNetNuke.UI.Utilities;
-using Telerik.Web.UI;
 using DotNetNuke.Entities.Users;
 namespace ForsythCo.Modules.MeetingDocumentManager
 {
@@ -25,12 +24,17 @@ namespace ForsythCo.Modules.MeetingDocumentManager
                 //av.BaseURL = baseURL;
                 //avNext.BaseURL = baseURL;
 
-
                 if (IsEditable)
                 {
-                    RadGrid1.Columns[0].Visible = true;
                     pnlAdminAddMeeting.Visible = true;
                     lnkAddMeeting.NavigateUrl = EditUrl(string.Empty, string.Empty, "Meetings");
+
+                    hdnEditAlert.Value = EditUrl(string.Empty, string.Empty, "Alert", "tid=");
+                    hdnEditVideo.Value = EditUrl(string.Empty, string.Empty, "Video", "tid=");
+                    hdnEditDoc.Value = EditUrl(string.Empty, string.Empty, "Documents", "tid=");
+                    hdnEditMeeting.Value = EditUrl(string.Empty, string.Empty, "Meetings", "tid=");
+
+                    hdnIsEditor.Value = "true";
                 }
 
                 if (Meeting != -1)
@@ -74,35 +78,6 @@ namespace ForsythCo.Modules.MeetingDocumentManager
             }
         }
 
-        protected void RadGrid1_DataBound(object sender, Telerik.Web.UI.GridItemEventArgs e)
-        {
-            if (e.Item.ItemType == GridItemType.AlternatingItem || e.Item.ItemType == GridItemType.Item) {
-                var _lnkAddVideo = e.Item.FindControl("lnkAddVideo") as HyperLink;
-                var _lnkAddDocs = e.Item.FindControl("lnkAddDocs") as HyperLink;
-                var _lblCount = e.Item.FindControl("lblDocCount") as Label;
-                var _lnkAlert = e.Item.FindControl("lnkAlert") as HyperLink;
-                var _lnkEditMeeting = e.Item.FindControl("lnkEditMeeting") as HyperLink;
-                var t = (Meeting)e.Item.DataItem;
-
-                if (!UserInfo.IsInRole("VideoEditors"))
-                    _lnkAddVideo.Visible = false;
-
-                if(IsEditable)
-                {
-                    _lblCount.Visible = true;
-                    UserInfo ui = UserController.GetUserById(PortalId, t.CreatedBy);
-                    if (Object.Equals(ui, null))
-                        _lblCount.Text = String.Format("Added By: {0}<br/>Documents: {1}", "User Removed", CountDocuments(t.Documents));
-                    else
-                        _lblCount.Text = String.Format("Added By: {0}<br/>Documents: {1}", ui.DisplayName, CountDocuments(t.Documents));
-                    _lnkAlert.NavigateUrl = EditUrl(string.Empty, string.Empty, "Alert", "tid=" + t.MeetingID);
-                    _lnkAddVideo.NavigateUrl = EditUrl(string.Empty, string.Empty, "Video", "tid=" + t.MeetingID);
-                    _lnkAddDocs.NavigateUrl = EditUrl(string.Empty, string.Empty, "Documents", "tid=" + t.MeetingID);
-                    _lnkEditMeeting.NavigateUrl = EditUrl(string.Empty, string.Empty, "Meetings", "tid=" + t.MeetingID);
-                }
-            }
-        }
-
         protected int CountDocuments(IEnumerable<Document> d)
         {
             int v = 0;
@@ -112,17 +87,7 @@ namespace ForsythCo.Modules.MeetingDocumentManager
             }
             return v;
         }
-        protected void RadGrid1_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
-        {
-            if (Group != -1)
-            {
-                (sender as RadGrid).DataSource = meetCon.GetByMeetingGroup(Group);
-            }
-            else
-            {
-                (sender as RadGrid).DataSource = meetCon.GetAllMeetings();
-            }
-        }
+
 
         protected void rptItemListOnItemDataBound(object sender, RepeaterItemEventArgs e)
         {

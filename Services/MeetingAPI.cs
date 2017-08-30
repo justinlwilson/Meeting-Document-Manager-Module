@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using DotNetNuke.Web.Api;
 using ForsythCo.Modules.MeetingDocumentManager.Components;
 using System.ServiceModel.Syndication;
+using Newtonsoft.Json;
 
 namespace ForsythCo.Modules.MeetingDocumentManager.Services
 {
@@ -23,10 +24,105 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Services
 
         [AllowAnonymous]
         [HttpGet]
+        public string GetUpcomingMeetingsJSON()
+        {
+            MeetingController conM = new MeetingController();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(conM.GetUpcomingMeetings());
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public string GetActiveMeetingsJSON()
+        {
+            MeetingController conM = new MeetingController();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(conM.GetAllActiveMeetings());
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         public IEnumerable<Meeting> GetMeetings()
         {
             return new MeetingController().GetUpcomingMeetings();
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingsJSON()
+        {
+
+            MeetingController conM = new MeetingController();
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(conM.GetAllMeetings()), System.Text.Encoding.UTF8, "application/json")
+            };
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingsByOffset(string offset, string pagesize)
+        {
+            HttpResponseMessage msg = new HttpResponseMessage();
+
+            MeetingController conM = new MeetingController();
+            msg.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(conM.GetByOffset(Convert.ToInt32(offset), Convert.ToInt32(pagesize))), System.Text.Encoding.UTF8, "application/json");
+            return msg;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingsByGroupType(string group, string type)
+        {
+            MeetingController con = new MeetingController();
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(con.GetFilteredByGT(Convert.ToInt32(group), Convert.ToInt32(type))), System.Text.Encoding.UTF8, "application/json")
+            };
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingsByDate(string month, string year)
+        {
+            HttpResponseMessage msg = new HttpResponseMessage();
+
+            MeetingController con = new MeetingController();
+            msg.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(con.GetFilteredByDate(Convert.ToInt32(month), Convert.ToInt32(year))), System.Text.Encoding.UTF8, "application/json");
+            return msg;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingYears()
+        {
+            HttpResponseMessage msg = new HttpResponseMessage();
+
+            MeetingYearController con = new MeetingYearController();
+            msg.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(con.GetMeetingYears()), System.Text.Encoding.UTF8, "application/json");
+            return msg;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingGroupsJSON()
+        {
+            MeetingGroupController con = new MeetingGroupController();
+            HttpResponseMessage msg = new HttpResponseMessage();
+            msg.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(con.GetMeetingGroups()), System.Text.Encoding.UTF8, "application/json");
+
+            return msg;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetMeetingTypesJSON()
+        {
+            MeetingTypeController con = new MeetingTypeController();
+            HttpResponseMessage msg = new HttpResponseMessage();
+            msg.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(con.GetMeetingTypes()), System.Text.Encoding.UTF8, "application/json");
+
+            return msg;
+        }
+
 
         [AllowAnonymous]
         [HttpGet]

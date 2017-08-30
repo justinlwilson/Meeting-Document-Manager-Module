@@ -21,6 +21,8 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Components
                 throw new System.Exception(o.ErrMsg);
         }
 
+
+
         public void SP_UpdateMeeting(MeetingSP o)
         {
             o.ErrMsg = "";
@@ -45,6 +47,22 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Components
                 throw new Exception(err);
         }
 
+        public IEnumerable<Meeting> GetFilteredByGT(int group, int type)
+        {
+            using (IDataContext ctx = DataContext.Instance())
+            {
+                return ctx.ExecuteQuery<Meeting>(CommandType.StoredProcedure, string.Format("{0}MDM_MeetingsFilterGT", obj), group, type);
+            }
+        }
+
+        public IEnumerable<Meeting> GetFilteredByDate(int month, int year)
+        {
+            using (IDataContext ctx = DataContext.Instance())
+            {
+                return ctx.ExecuteQuery<Meeting>(CommandType.StoredProcedure, string.Format("{0}MDM_MeetingsFilterDate", obj), month, year);
+            }
+        }
+
         public void UpdateTheMeeting(Meeting m)
         {
             using (IDataContext ctx = DataContext.Instance())
@@ -63,6 +81,12 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Components
         {
             using (IDataContext ctx = DataContext.Instance())
                 return ctx.ExecuteQuery<Meeting>(CommandType.Text, "ORDER BY Begining DESC");
+        }
+
+        public IEnumerable<Meeting> GetByOffset(int offset, int pagesize)
+        {
+            using (IDataContext ctx = DataContext.Instance())
+                return ctx.ExecuteQuery<Meeting>(CommandType.Text, "ORDER BY Begining DESC OFFSET @0 ROW FETCH NEXT @1 ROWS ONLY", offset, pagesize);
         }
 
         public Meeting GetMeetingByID(int MeetingID)
