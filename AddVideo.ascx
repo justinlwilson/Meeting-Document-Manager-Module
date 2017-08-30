@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="AddVideo.ascx.cs" Inherits="ForsythCo.Modules.MeetingDocumentManager.AddVideo" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/LabelControl.ascx" %>
-<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <div class="dnnForm" id="panels" style="width:95%;">
     <h2 class="dnnFormSectionHead"><a href="#">Add Video</a></h2>
     <fieldset class="dnnClear">
@@ -25,24 +24,22 @@
             <asp:LinkButton runat="server" ID="btnAddBookmark" OnClick="btnAddBookmark_Click"><em class="icon icon-plus-square" style="font-size:25px;"></em></asp:LinkButton>
         </div>
         <div class="dnnFormItem">
-            <telerik:RadGrid runat="server" ID="grdBookmarks" Skin="MetroTouch" AutoGenerateColumns="false" ShowHeader="false"
-                OnNeedDataSource="RadGrid_NeedData" OnDeleteCommand="RadGrid1_DeleteCommand">
-                <mastertableview EditMode="InPlace" DataKeyNames="MarkerID">
-                    <Columns>
-                    <telerik:GridTemplateColumn>
+            <asp:DataGrid runat="server" ID="grdBookmarks" CssClass="table table-striped" OnDeleteCommand="grdBookmarks_DeleteCommand" AutoGenerateColumns="false" ShowHeader="false" ShowFooter="false">
+                <Columns>
+                    <asp:BoundColumn DataField="MarkerID" Visible="true" />
+                    <asp:TemplateColumn>
                         <ItemTemplate>
                             <%#Eval("TimeString") %>
                         </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn>
+                    </asp:TemplateColumn>
+                    <asp:TemplateColumn>
                         <ItemTemplate>
                             <%#Eval("ShortDescription") %>
                         </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                    <telerik:GridButtonColumn CommandName="Delete" Text="Delete" UniqueName="DeleteColumn" />
+                    </asp:TemplateColumn>
+                    <asp:ButtonColumn CommandName="Delete" Text="Delete" />
                 </Columns>
-                </mastertableview>
-            </telerik:RadGrid>
+            </asp:DataGrid>
         </div>
     </fieldset>
 </div>

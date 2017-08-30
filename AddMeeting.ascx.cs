@@ -23,10 +23,6 @@ namespace ForsythCo.Modules.MeetingDocumentManager
                 if (!Page.IsPostBack) 
                 {
                     PopulateDropDowns();
-                    timePicker.TimeView.Interval = new TimeSpan(0,30,0);
-                    timePicker.TimeView.StartTime = new TimeSpan(6, 0, 0);
-                    timePicker.TimeView.EndTime = new TimeSpan(22, 0, 0);
-                    timePicker.TimeView.Columns = 4;
                 }
 
                 if (ItemId != -1)
@@ -38,10 +34,21 @@ namespace ForsythCo.Modules.MeetingDocumentManager
                         ddLocation.Items.FindByValue(_m.LocationID.ToString()).Selected = true;
                         ddMeetingGroup.Items.FindByValue(_m.MeetingGroupID.ToString()).Selected = true;
                         ddMeetingType.Items.FindByValue(_m.MeetingTypeID.ToString()).Selected = true;
-
-                        timePicker.SelectedTime = _m.Begining.TimeOfDay;
-                        datePicker.SelectedDate = _m.Begining;
+                    datePicker.Text = _m.Begining.ToShortDateString();
+                    txtMin.Text = _m.Begining.Minute.ToString();
+                    if (_m.Begining.Hour > 12)
+                    {
+                        txtHour.Text = (_m.Begining.Hour - 12).ToString();
+                        ddAMPM.SelectedIndex = 1;
                     }
+                    else
+                    {
+                        txtHour.Text = _m.Begining.Hour.ToString();
+                        ddAMPM.SelectedIndex = 0;
+                    }
+                    //timePicker.SelectedTime = _m.Begining.TimeOfDay;
+                    //datePicker.SelectedDate = _m.Begining;
+                }
                     
                 }
             
@@ -66,8 +73,19 @@ namespace ForsythCo.Modules.MeetingDocumentManager
 
         protected void btnAddMeeting_Click(object sender, EventArgs e)
         {
-            DateTime beginingDate = Convert.ToDateTime(datePicker.SelectedDate);
-            beginingDate = beginingDate.Add((TimeSpan)timePicker.SelectedTime);
+            DateTime beginingDate = Convert.ToDateTime(datePicker.Text);
+            TimeSpan ts;
+
+            if (ddAMPM.SelectedIndex == 1)
+            {
+                ts = new TimeSpan(Convert.ToInt32(txtHour.Text) + 12, Convert.ToInt32(txtMin.Text), 0);
+            }
+            else
+            {
+                ts = new TimeSpan(Convert.ToInt32(txtHour.Text), Convert.ToInt32(txtMin.Text), 0);
+            }
+            beginingDate = beginingDate.Date + ts;
+            //beginingDate = null;
             if(isEdit)
             {
                 _m.MeetingGroupID = Convert.ToInt32(ddMeetingGroup.SelectedValue);
@@ -95,8 +113,8 @@ namespace ForsythCo.Modules.MeetingDocumentManager
 
         protected void ClearForm()
         {
-            datePicker.Clear();
-            timePicker.Clear();
+            //datePicker.Clear();
+            //timePicker.Clear();
         }
     }
 }

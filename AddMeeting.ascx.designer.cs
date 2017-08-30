@@ -82,7 +82,7 @@ namespace ForsythCo.Modules.MeetingDocumentManager {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadDatePicker datePicker;
+        protected global::System.Web.UI.WebControls.TextBox datePicker;
         
         /// <summary>
         /// lblTime control.
@@ -94,13 +94,31 @@ namespace ForsythCo.Modules.MeetingDocumentManager {
         protected global::DotNetNuke.UI.UserControls.LabelControl lblTime;
         
         /// <summary>
-        /// timePicker control.
+        /// txtHour control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadTimePicker timePicker;
+        protected global::System.Web.UI.WebControls.TextBox txtHour;
+        
+        /// <summary>
+        /// txtMin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMin;
+        
+        /// <summary>
+        /// ddAMPM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddAMPM;
         
         /// <summary>
         /// btnAddMeeting control.

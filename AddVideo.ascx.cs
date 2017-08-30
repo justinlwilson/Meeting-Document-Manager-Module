@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Telerik.Web.UI;
 
 namespace ForsythCo.Modules.MeetingDocumentManager
 {
@@ -25,12 +24,9 @@ namespace ForsythCo.Modules.MeetingDocumentManager
             if (!Page.IsPostBack)
             {
                 txtVimeo.Text = meetCon.GetMeetingByID(ItemId).VimeoNumber;
+                grdBookmarks.DataSource = meetCon.GetMeetingByID(ItemId).Markers;
+                grdBookmarks.DataBind();
             }
-        }
-
-        protected void RadGrid_NeedData(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
-        {
-            (sender as RadGrid).DataSource = meetCon.GetMeetingByID(ItemId).Markers;
         }
 
         protected void btnAddVideo_Click(object sender, EventArgs e)
@@ -67,16 +63,16 @@ namespace ForsythCo.Modules.MeetingDocumentManager
             txtTitle.Text = "";
         }
 
-        protected void RadGrid1_DeleteCommand(object source, Telerik.Web.UI.GridCommandEventArgs e)
+        protected void grdBookmarks_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
-
-            if (e.Item.ItemType == GridItemType.AlternatingItem || e.Item.ItemType == GridItemType.Item) 
+            if(e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                int markerID = Convert.ToInt32(e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["MarkerID"]);
+                int markerID = Convert.ToInt32(e.Item.Cells[0].Text);
 
                 markerCon.DeleteMarker(markerCon.GetMarkerByMarkerID(markerID));
+
+                e.Item.Visible = false;
             }
         }
-
     }
 }
