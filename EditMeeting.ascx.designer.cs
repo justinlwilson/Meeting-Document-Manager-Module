@@ -76,6 +76,15 @@ namespace ForsythCo.Modules.MeetingDocumentManager {
         protected global::DotNetNuke.UI.UserControls.LabelControl lblDate;
         
         /// <summary>
+        /// datePicker control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadDatePicker datePicker;
+        
+        /// <summary>
         /// lblTime control.
         /// </summary>
         /// <remarks>
@@ -83,6 +92,15 @@ namespace ForsythCo.Modules.MeetingDocumentManager {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DotNetNuke.UI.UserControls.LabelControl lblTime;
+        
+        /// <summary>
+        /// timePicker control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadTimePicker timePicker;
         
         /// <summary>
         /// btnAddMeeting control.
