@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditMeeting.ascx.cs" Inherits="ForsythCo.Modules.MeetingDocumentManager.EditMeeting" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/LabelControl.ascx" %>
-<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <div class="dnnForm" id="locationpanels" style="width:95%;">
     <h2 class="dnnFormSectionHead"><a href="#">Add a New Meeting</a></h2>
     <fieldset class="dnnClear">
@@ -18,12 +17,10 @@
         </div>
         <div class="dnnFormItem">
             <dnn:label runat="server" id="lblDate"></dnn:label>
-            <telerik:RadDatePicker id="datePicker" CssClass="dnnFormInput" Runat="server"></telerik:RadDatePicker>
             <asp:RequiredFieldValidator runat="server" ControlToValidate="datePicker" CssClass="dnnFormMessage dnnFormError" ResourceKey="Date.Required"></asp:RequiredFieldValidator>
         </div>
         <div class="dnnFormItem">
             <dnn:label runat="server" id="lblTime"></dnn:label>
-            <telerik:RadTimePicker id="timePicker" CssClass="dnnFormInput" Runat="server"></telerik:RadTimePicker>
             <asp:RequiredFieldValidator runat="server" ControlToValidate="timePicker" CssClass="dnnFormMessage dnnFormError" ResourceKey="Time.Required"></asp:RequiredFieldValidator>
         </div>
         <div class="dnnFormItem">
