@@ -1,0 +1,91 @@
+﻿
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingMonths
+AS
+BEGIN
+	SELECT FORMAT(Begining, 'yyyy MM') AS DateItem FROM {databaseOwner}{objectQualifier}MDM_Meetings
+	GROUP BY FORMAT(Begining, 'yyyy MM')
+	ORDER BY FORMAT(Begining, 'yyyy MM') DESC
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingsFilterDate
+	@Month INT = NULL,
+	@Year INT = NULL
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF @Month = ''
+	SET @Month = NULL
+	IF @Year = ''
+	SET @Year = NULL
+
+	IF @Month IS NOT NULL AND @Year IS NOT NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings
+		 WHERE DATEPART(YEAR, Begining) = @Year AND DATEPART(MONTH, Begining) = @Month
+		ORDER BY Begining DESC
+
+		RETURN
+	END
+
+	IF @Month IS NULL AND @Year IS NOT NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings
+		WHERE DATEPART(YEAR, Begining) = @Year
+		ORDER BY Begining DESC
+
+		RETURN
+	END
+
+	IF @Month IS NOT NULL AND @Year IS NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings
+		WHERE DATEPART(MONTH, Begining) = @Month
+		ORDER BY Begining DESC
+	END
+
+
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_MeetingsFilterGT
+	@Group INT = NULL,
+	@Type INT = NULL
+AS
+BEGIN
+	IF @Group = ''
+	SET @Group = NULL
+	IF @Type = ''
+	SET @Type = NULL
+
+	SET NOCOUNT ON;
+	IF @Type IS NULL AND @Group IS NOT NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings WHERE MeetingGroupID = @Group ORDER BY Begining DESC
+		RETURN
+	END
+	
+	IF @Type IS NOT NULL AND @Group IS NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings WHERE MeetingTypeID = @Type ORDER BY Begining DESC
+		RETURN
+	END
+
+	IF @Type IS NOT NULL AND @Group IS NOT NULL
+	BEGIN
+		SELECT * FROM {databaseOwner}{objectQualifier}MDM_Meetings WHERE MeetingTypeID = @Type AND MeetingGroupID = @Group ORDER BY Begining DESC
+		RETURN
+	END
+END
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}MDM_GetMeetingYears
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+    SELECT DATEPART(YEAR, Begining) AS [Year] FROM {databaseOwner}{objectQualifier}MDM_Meetings
+GROUP BY DATEPART(YEAR, Begining)
+ORDER BY DATEPART(YEAR, Begining) DESC
+END
+GO

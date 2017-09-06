@@ -8,9 +8,9 @@
 <div class="License">
 	<h3>About the Meeting Document Manager</h3>
 	<p class="Owner">
-		<b>Version 1.5</b><br /><br />
+		<b>Version 2.0</b><br /><br />
 	</p>
-	<p>Version 1.5 is the initial release of the Meeting Document Manager module for DNN.  
+	<p>Version 2.0 is the latest release of the Meeting Document Manager module for DNN.  
 	This software was initially created by Justin Wilson of Forsyth County Information Systems &amp; Technology.</p>
 <h3>Module Project Team:</h3>
 <ul>
@@ -20,7 +20,5 @@
 </ul>
 <h3>Updates:</h3>
 <ul>
-	<li>Removed documents that have already been added from the dropdown menu when adding new documents.</li>
-	<li>Resolved issues with Search Indexing</li>
-	<li>Added new MeetingAdmin role</li>
+	<li>Removed Telerik Items</li>
 </ul>

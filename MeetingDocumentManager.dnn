@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="MeetingDocumentManager" type="Module" version="01.05.00">
+    <package name="MeetingDocumentManager" type="Module" version="02.00.00">
       <friendlyName>Meetings</friendlyName>
       <description>Forsyth County Meeting Document Manager Module</description>
       <iconFile>Images/MDMIcon.png</iconFile>
@@ -21,13 +21,13 @@
             <basePath>DesktopModules\MeetingDocumentManager</basePath>
             <script type="Install">
               <path>Providers\DataProviders\SqlDataProvider</path>
-              <name>01.05.00.SqlDataProvider</name>
-              <version>01.05.00</version>
+              <name>02.00.00.SqlDataProvider</name>
+              <version>02.00.00</version>
             </script>
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>01.05.00</version>
+              <version>02.00.00</version>
             </script>
           </scripts>
         </component>
