@@ -303,7 +303,7 @@ function DrawMeetingRecords(data, isNew) {
 
         $(infoCol).html(' ' + value.MeetingGroup.name + '<br/>' + value.MeetingType.name + ' @ ' + value.TimeString);
 
-        if (value.VimeoNumber != null) {
+        if (value.VimeoNumber != null || value.VimeoNumber == '') {
             $(infoCol).prepend($('<em></em>').addClass('icon icon-youtube-play').html(value.Flag));
         }
 
