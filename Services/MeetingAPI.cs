@@ -360,9 +360,14 @@ namespace ForsythCo.Modules.MeetingDocumentManager.Services
         {
             Document d = new DocumentController().GetDocumentByID(Convert.ToInt32(docID));
             Meeting m = new MeetingController().GetMeetingByID(d.MeetingID);
-
-            string result = "<h1>" + m.MeetingGroup.GroupName + "</h1>";
+            string result = "<!DOCTYPE html><html><head><title>" + m.DateString + " " + m.FormattedDescription + "</title></head><body onload=\"printPage()\">";
+            result += "<h1>" + m.DateString + " " + m.MeetingGroup.GroupName + " " + m.MeetingType.TypeName + "</h1>";
+            result += "<h3>" + d.DocumentGroup.GroupName + "</h3>";
             result += HttpUtility.HtmlDecode(d.Content);
+
+            result += "<script> function printPage(){ window.print();}</script>";
+            result += "</body></html>";
+
             return new HttpResponseMessage()
             {
                 Content = new StringContent(result, System.Text.Encoding.UTF8, "text/html")

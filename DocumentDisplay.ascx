@@ -20,7 +20,7 @@
                 <asp:Repeater runat="server" ID="rptDocuments" OnItemDataBound="Repeater1_ItemDataBound">
                     <ItemTemplate>
                         <div id="<%#DataBinder.Eval(Container.DataItem, "DocumentGroup.GroupName").ToString().Replace(" ","") %>" class="tab-pane <%#DataBinder.Eval(Container.DataItem, "DocumentGroup.GroupName").ToString()=="Public Notice"?"active":"" %>">
-                            <asp:HyperLink runat="server" ID="lnkEdit" Visible="false"><em class="icon icon-pencil-square-o"></em> edit</asp:HyperLink> <%# Server.HtmlDecode(DataBinder.Eval(Container.DataItem, "Content").ToString()) %>
+                            <asp:HyperLink runat="server" ID="lnkEdit" Visible="false"><em class="icon icon-pencil-square-o"></em> edit</asp:HyperLink> <div class="text-right"><asp:HyperLink runat="server" ID="HyperLink1" Visible="false"><button type="button" class="button button-warning"><em class="icon icon-pencil-square-o"></em> Edit</button></asp:HyperLink><a target="_blank"  href="/DesktopModules/MeetingDocumentManager/api/meetingapi/Document?docID=<%#DataBinder.Eval(Container.DataItem, "DocumentID").ToString()%>"><button type="button" class="btn btn-success"><em class="icon icon-print"></em> Print</button></a></div><%# Server.HtmlDecode(DataBinder.Eval(Container.DataItem, "Content").ToString()) %>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
