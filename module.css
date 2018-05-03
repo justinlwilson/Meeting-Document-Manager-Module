@@ -17,20 +17,22 @@
 .keyframe {
 	display:block;
 	padding:5px;
-    height:35px;
 	font-size:15px;
+    height:auto !important;
 	cursor:pointer;
     border-left:solid rgb(204, 204, 204) 4px;
 }
 .keyframe .time{
 	display:inline-block;
 	width:50px;
+    vertical-align:top;
 	text-align:right;
 	font-size:10px;
 	margin-right:5px;
 }
 .keyframe .title{
 	display:inline-block;
+    width:240px;
 }
 .MDM_video{
 	float:left;
